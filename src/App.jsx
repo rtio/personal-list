@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ListBulletIcon } from '@heroicons/react/24/solid'
 
 const tasksList = [
@@ -19,25 +20,30 @@ const tasksList = [
 ];
 
 function App() {
+  const [myTodoList, setMyTodoList] = useState(tasksList);
   const doneStyle = 'flex-none rounded-full p-1 text-green-400 bg-green-400/10';
   const todoStyle = 'flex-none rounded-full p-1 text-gray-500 bg-gray-100/10';
 
-  const listItems = tasksList.map(task => (
+  function removeItem(id) {
+    const newList = myTodoList.filter(task => task.id !== id);
+    setMyTodoList(newList);
+  }
+
+  const listItems = myTodoList.map(task => (
       <li key={task.id} className="relative flex items-center space-x-4 py-4">
         <div className="min-w-0 flex-auto">
           <div className="flex items-center gap-x-3">
-            <div className={task.completed ? doneStyle : todoStyle}>
+            <div className={ task.completed ? doneStyle : todoStyle }>
               <div className="h-2 w-2 rounded-full bg-current"></div>
             </div>
             <h2 className="min-w-0 text-sm font-semibold leading-6 text-white">
               <a href="#" className="flex gap-x-2">
                 <span className="truncate">{ task.description }</span>
-                <span className="absolute inset-0"></span>
               </a>
             </h2>
           </div>
         </div>
-        <div className="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset text-indigo-400 bg-indigo-400/10 ring-indigo-400/30">Remove</div>
+        <a onClick={(e) => removeItem(task.id)} className="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset text-indigo-400 bg-indigo-400/10 ring-indigo-400/30">Remove</a>
       </li>
   ));
 
